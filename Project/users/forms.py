@@ -1,9 +1,10 @@
 from flask_wtf import FlaskForm
-from wtforms import SubmitField, BooleanField, StringField, PasswordField, FloatField
+from wtforms import SubmitField, BooleanField, StringField, PasswordField
 from wtforms.validators import DataRequired, ValidationError, EqualTo
 from flask_wtf.file import FileField, FileAllowed
-import app
-from wtforms.widgets import TextArea
+from flask_login import current_user
+from Project.models import User
+
 
 class RegistrationForm(FlaskForm):
     name = StringField('Name', [DataRequired()])
@@ -13,12 +14,12 @@ class RegistrationForm(FlaskForm):
     submit = SubmitField('Register')
 
     def verify_name(self, name):
-        user = app.User.query.filter_by(name=name.data).first()
+        user = User.query.filter_by(name=name.data).first()
         if user:
             raise ValidationError('This name is not valid.Please enter another name.')
 
     def verify_email(self, email):
-        user = app.User.query.filter_by(email=email.data).first()
+        user = User.query.filter_by(email=email.data).first()
         if user:
             raise ValidationError('This email is not valid.Please enter another name.')
 
@@ -36,35 +37,13 @@ class UserUpdateForm(FlaskForm):
     submit = SubmitField('Update')
 
     def verify_name(self, name):
-        if name.data != app.current_user.name:
-            user = app.User.query.filter_by(name=name.data).first()
+        if name.data != current_user.name:
+            user = User.query.filter_by(name=name.data).first()
             if user:
                 raise ValidationError('This name is not valid.Please enter another name.')
 
     def verify_email(self, email):
-        if email.data != app.current_user.email:
-            user = app.User.query.filter_by(email=email.data).first()
+        if email.data != current_user.email:
+            user = User.query.filter_by(email=email.data).first()
             if user:
                 raise ValidationError('This email is not valid.Please enter another name.')
-
-class PatientForm(FlaskForm):
-    name = StringField('Name', [DataRequired()])
-    surname = StringField('Surname', [DataRequired()])
-    email =StringField('Email', [DataRequired()])
-    phone = StringField ('Phone number', [DataRequired()])
-    relationship =StringField('Next of Kin', [DataRequired()])
-    treatment =StringField('Treatment plan', [DataRequired()], widget=TextArea())
-    submit = SubmitField ("Submit")
-
-class NotesForm(FlaskForm):
-    sender = StringField('From', [DataRequired()])
-    receiver = StringField('To', [DataRequired()])
-    notes =StringField('Notes', [DataRequired()], widget=TextArea())
-    submit = SubmitField ("Submit")
-
-
-
-
-
-
-
