@@ -2,8 +2,6 @@ import os
 from flask import Flask, render_template, redirect, url_for, flash, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
-from flask_admin import Admin
-from flask_admin.contrib.sqla import ModelView
 from flask_login import LoginManager, UserMixin, current_user, logout_user, login_user, login_required
 from datetime import datetime
 import secrets
@@ -109,7 +107,7 @@ def save_picture(form_picture):
     picture_fn = random_hex + f_ext
     picture_path = os.path.join(app.root_path, 'static/pictures', picture_fn)
 
-    output_size = (190, 150)
+    output_size = (90, 90)
     i = Image.open(form_picture)
     i.thumbnail(output_size)
     i.save(picture_path)
@@ -197,9 +195,60 @@ def delete(id):
     return redirect(url_for('posts'))
 
 
+@app.route('/notes')
+def notes():
+    # get all notes in one place
+    notes = Notes.query.order_by(Notes.date_posted)
+    return render_template("notes.html", notes=notes)
+
+@app.route('/notes/<int:id>')
+def note(id):
+    note = Notes.query.get(id)
+    return render_template("note.html", note=note)
+
+@app.route('/add_note', methods=['GET', 'POST'])
+def add_notes():
+    form = forms.NotesForm()
+    if form.validate_on_submit():
+        note = Notes(sender=form.sender.data,receiver=form.receiver.data, notes=form.notes.data)
+        # clear the form
+        form.sender.data=''
+        form.receiver.data=''
+        form.notes.data=''
+        db.session.add(note)
+        db.session.commit()
+        flash("Data Submitted Successfully!")
+    return render_template("add_note.html", form=form)
+
+@app.route('/notes/edit/<int:id>', methods=['GET', 'POST'])
+def edit(id):
+    note = Notes.query.get(id)
+    form = forms.NotesForm()
+    if form.validate_on_submit():
+        note.sender = form.sender.data
+        note.receiver = form.receiver.data
+        note.notes = form.notes.data
+        # update database
+        db.session.add(note)
+        db.session.commit()
+        flash("Post has been updated!")
+        return redirect(url_for('notes', id=note.id))
+    form.sender.data=note.sender
+    form.receiver.data=note.receiver
+    form.notes.data=note.notes
+    return render_template("edit.html", form=form)
+
+@app.route('/notes/delete/<int:id>')
+def delete2(id):
+    delete2 = Notes.query.get(id)
+    db.session.delete(delete2)
+    db.session.commit()
+    return redirect(url_for('notes'))
+
 @app.route("/")
 def index():
-    return render_template("base.html")
+    return render_template("index.html")
+
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=5000, debug=True)

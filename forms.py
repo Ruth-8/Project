@@ -56,7 +56,11 @@ class PatientForm(FlaskForm):
     treatment =StringField('Treatment plan', [DataRequired()], widget=TextArea())
     submit = SubmitField ("Submit")
 
-
+class NotesForm(FlaskForm):
+    sender = StringField('From', [DataRequired()])
+    receiver = StringField('To', [DataRequired()])
+    notes =StringField('Notes', [DataRequired()], widget=TextArea())
+    submit = SubmitField ("Submit")
 
 
 
