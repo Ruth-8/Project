@@ -16,9 +16,9 @@
     From: {{note.sender}}<br>
     To: {{note.receiver}}<br>
     Note: {{note.notes}}<br> <br>
-    <a href="{{url_for('note', id=note.id)}}" class="btn btn-dark">View note</a>
-    <a href="{{url_for('edit', id=note.id)}}" class="btn btn-dark">Update</a>
-    <a href="{{url_for('delete2', id=note.id)}}" class="btn btn-dark">Delete</a>
+    <a href="{{url_for('views.note', id=note.id)}}" class="btn btn-dark">View note</a>
+    <a href="{{url_for('views.edit', id=note.id)}}" class="btn btn-dark">Update</a>
+    <a href="{{url_for('views.delete2', id=note.id)}}" class="btn btn-dark">Delete</a>
 </div>
 <br>
 {% endfor%}

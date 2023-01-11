@@ -20,9 +20,9 @@
     Phone number: {{post.phone}}<br>
     Next of Kin: {{post.relationship}}<br>
     Treatment plan: {{post.treatment}}<br> <br>
-    <a href="{{url_for('post', id=post.id)}}" class="btn btn-dark">View patient</a>
-    <a href="{{url_for('update', id=post.id)}}" class="btn btn-dark">Update</a>
-    <a href="{{url_for('delete', id=post.id)}}" class="btn btn-dark">Delete</a>
+    <a href="{{url_for('views.post', id=post.id)}}" class="btn btn-dark">View patient</a>
+    <a href="{{url_for('views.update', id=post.id)}}" class="btn btn-dark">Update</a>
+    <a href="{{url_for('views.delete', id=post.id)}}" class="btn btn-dark">Delete</a>
 </div>
 <br>
 {% endfor%}
