@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<form method="POST">
+    {{ form.hidden_tag()}}
+    <div class="form-group">
+        {{form.name.label(class="form-control-label")}}
+        {{form.name(class="form-control")}}
+    </div><div class="form-group">
+        {{form.surname.label(class="form-control-label")}}
+        {{form.surname(class="form-control")}}
+    </div>
+    <div class="form-group">
+        {{form.email.label(class="form-control-label")}}
+        {{form.email(class="form-control")}}
+    </div><div class="form-group">
+        {{form.phone.label(class="form-control-label")}}
+        {{form.phone(class="form-control")}}
+    </div><div class="form-group">
+        {{form.relationship.label(class="form-control-label")}}
+        {{form.relationship(class="form-control")}}
+    </div><div class="form-group">
+        {{form.treatment.label(class="form-control-label")}}
+        {{form.treatment(class="form-control")}}
+    </div>
+    <div class="form-group">
+        {{form.submit(class="btn btn-dark")}}
+    </div>
+</form>
+
+<a href="{{ url_for('posts')}}" class="btn btn-dark">Back To List</a>
+
+{% endblock %}
+
